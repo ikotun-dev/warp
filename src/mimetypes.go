@@ -3,6 +3,7 @@ package main
 import "strings"
 
 func getMimeType(extension string) string {
+	DefaultMimeType := "text/plain"
 	ext := strings.ToLower(extension)
 	switch ext {
 	case "aac":

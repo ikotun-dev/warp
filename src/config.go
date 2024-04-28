@@ -12,6 +12,14 @@ type Config struct {
 	RootDir          string `yaml:"root"`
 }
 
+func InitConfig() *Config {
+	config, err := ReadConfig("config.yaml")
+	if err != nil {
+		fmt.Println("Error : ", err)
+	}
+	return config
+}
+
 func ReadConfig(filename string) (*Config, error) {
 
 	var config Config
