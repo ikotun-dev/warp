@@ -3,5 +3,12 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Server running...")
+	filename := "config.yaml"
+	config, err := ReadConfig(filename)
+	if err != nil {
+
+		fmt.Println("Error : ", err)
+	}
+
+	fmt.Println("Config :  ", config)
 }

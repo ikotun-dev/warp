@@ -1,11 +1,31 @@
 package main
 
 import (
-	"gopkg.in/yaml.v2"
+	"fmt"
+	"gopkg.in/yaml.v3"
+	"os"
 )
 
 type Config struct {
-	port             int    `yaml:"port"`
-	fallbackDocument string `yaml:"fallbackDocument"`
-	rootDir          string `yaml:"root"`
+	Port             int    `yaml:"port"`
+	FallbackDocument string `yaml:"fallbackDocument"`
+	RootDir          string `yaml:"root"`
+}
+
+func ReadConfig(filename string) (*Config, error) {
+
+	var config Config
+
+	yamlFile, err := os.ReadFile("config.yaml")
+	if err != nil {
+		fmt.Printf("yamlFile.Get err #%v ", err)
+	}
+
+	fmt.Println("YAML file contents:", string(yamlFile))
+
+	err = yaml.Unmarshal(yamlFile, &config)
+	if err != nil {
+		fmt.Printf("Unmarshal: %v", err)
+	}
+	return &config, nil
 }
