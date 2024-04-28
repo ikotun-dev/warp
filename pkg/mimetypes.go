@@ -47,7 +47,7 @@ func getMimeType(extension string) string {
 	case "gif":
 		return "image/gif"
 	case "htc", "htm", "html", "stm":
-		return "text/html"
+		return "text/html; charset=utf-8"
 	case "htt":
 		return "text/webviewhtml"
 	case "ico":

@@ -1,0 +1,3 @@
+port: 8080
+fallbackDocument: 404.html
+root: text.html

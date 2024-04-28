@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
+	"path/filepath"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Port             int    `yaml:"port"`
+	Port             string `yaml:"port"`
 	FallbackDocument string `yaml:"fallbackDocument"`
 	RootDir          string `yaml:"root"`
 }
@@ -22,9 +24,10 @@ func InitConfig() *Config {
 
 func ReadConfig(filename string) (*Config, error) {
 
+	filePath := filepath.Join("./examples/static", filename)
 	var config Config
 
-	yamlFile, err := os.ReadFile("config.yaml")
+	yamlFile, err := os.ReadFile(filePath)
 	if err != nil {
 		fmt.Printf("yamlFile.Get err #%v ", err)
 	}

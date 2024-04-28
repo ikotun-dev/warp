@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func main() {
+func main_f() {
 	filename := "config.yaml"
 	config, err := ReadConfig(filename)
 	if err != nil {
