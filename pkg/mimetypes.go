@@ -4,7 +4,7 @@ import "strings"
 
 func getMimeType(extension string) string {
 	DefaultMimeType := "text/plain"
-	ext := strings.ToLower(extension)
+	ext := strings.ToLower(strings.TrimPrefix(extension, "."))
 	switch ext {
 	case "aac":
 		return "audio/aac"

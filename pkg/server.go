@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -11,16 +12,20 @@ var config *Config
 
 var mimeType string
 
+var filePath string
+
 func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 	if config == nil {
 		http.Error(w, "Configuration not initialized", http.StatusInternalServerError)
 		return
 	}
+	//Make heavy loggin a config option
 
-	filePath := "./examples/static" + r.URL.Path
+	filePath = "./examples/static" + r.URL.Path
 	_, err := os.Stat(filePath)
 
 	if err != nil {
+
 		fallbackDocument := config.FallbackDocument
 		filePath = filepath.Join("./examples/static", fallbackDocument)
 	}
@@ -28,18 +33,18 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 	ext := filepath.Ext(filePath)
 
 	if ext != "" {
-		mimeType = getMimeType(ext[1:])
+		mimeType = getMimeType(ext)
 	} else {
-		mimeType = "text/html"
+		mimeType = "text/html; charset=utf-8"
 	}
 
-	fmt.Println("Extension: ", ext)
+	log.Printf("Extension: %s", ext)
 
-	fmt.Println("MimeType : ", mimeType)
+	log.Printf("MimeType :  %s", mimeType)
 
 	w.Header().Set("Content-Type", mimeType)
 
-	fmt.Println("Server running on  : %s", config.Port)
+	fmt.Println("Server running on  : ", config.Port)
 	http.ServeFile(w, r, filePath)
 }
 
@@ -51,5 +56,9 @@ func main() {
 
 	fmt.Println("PORT : ", configPort)
 
-	http.ListenAndServe(configPort, nil)
+	err := http.ListenAndServe(configPort, nil)
+
+	if err != nil {
+		log.Fatal("Error : ", err)
+	}
 }
