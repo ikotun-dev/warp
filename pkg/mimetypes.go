@@ -124,6 +124,8 @@ func getMimeType(extension string) string {
 		return "video/mp2t"
 	case "ttf":
 		return "font/ttf"
+	case "map":
+		return "application/json"
 	case "txt", "c", "h", "bas":
 		return "text/plain"
 	case "vcf":

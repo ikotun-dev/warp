@@ -9,6 +9,8 @@ import (
 
 var config *Config
 
+var mimeType string
+
 func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 	if config == nil {
 		http.Error(w, "Configuration not initialized", http.StatusInternalServerError)
@@ -25,7 +27,13 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 
 	ext := filepath.Ext(filePath)
 
-	mimeType := getMimeType(ext[1:])
+	if ext != "" {
+		mimeType = getMimeType(ext[1:])
+	} else {
+		mimeType = "text/html"
+	}
+
+	fmt.Println("Extension: ", ext)
 
 	fmt.Println("MimeType : ", mimeType)
 
