@@ -24,7 +24,7 @@ func InitConfig() *Config {
 
 func ReadConfig(filename string) (*Config, error) {
 
-	filePath := filepath.Join("./examples/static", filename)
+	filePath := filepath.Join(config.RootDir, filename)
 	var config Config
 
 	yamlFile, err := os.ReadFile(filePath)

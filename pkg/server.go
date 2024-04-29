@@ -19,15 +19,16 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Configuration not initialized", http.StatusInternalServerError)
 		return
 	}
-	//Make heavy loggin a config option
 
-	filePath = "./examples/static" + r.URL.Path
+	//TODO: Loggin option
+	log.Printf("LOG: %s", r.URL)
+	filePath = config.RootDir + r.URL.Path
 	_, err := os.Stat(filePath)
 
 	if err != nil {
 
 		fallbackDocument := config.FallbackDocument
-		filePath = filepath.Join("./examples/static", fallbackDocument)
+		filePath = fallbackDocument
 	}
 
 	ext := filepath.Ext(filePath)
@@ -50,15 +51,12 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	config = InitConfig()
+
 	http.HandleFunc("/", serveStaticFile)
 
 	configPort := ":" + config.Port
 
 	fmt.Println("PORT : ", configPort)
 
-	err := http.ListenAndServe(configPort, nil)
-
-	if err != nil {
-		log.Fatal("Error : ", err)
-	}
+	log.Fatal(http.ListenAndServe(configPort, nil))
 }
