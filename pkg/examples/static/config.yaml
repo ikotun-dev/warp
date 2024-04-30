@@ -1,3 +1,0 @@
-port: 8080
-fallbackDocument: index.html
-root: index.html

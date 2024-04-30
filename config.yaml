@@ -1,0 +1,3 @@
+port: 8000
+fallbackDocument: index.html
+root: index.html

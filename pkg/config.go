@@ -14,8 +14,20 @@ type Config struct {
 	RootDir          string `yaml:"root"`
 }
 
+func MockConfig() *Config {
+	return &Config{
+		Port:             "8080",
+		FallbackDocument: "index.html",
+		RootDir:          "/path/to/root",
+	}
+}
+
 func InitConfig() *Config {
-	config, err := ReadConfig("config.yaml")
+	if _, err := os.Stat("../config.yaml"); os.IsNotExist(err) {
+		return MockConfig()
+	}
+	var err error
+	config, err = ReadConfig("../config.yaml")
 	if err != nil {
 		fmt.Println("Error : ", err)
 	}
@@ -24,7 +36,7 @@ func InitConfig() *Config {
 
 func ReadConfig(filename string) (*Config, error) {
 
-	filePath := filepath.Join(config.RootDir, filename)
+	filePath := filepath.Join(".", filename)
 	var config Config
 
 	yamlFile, err := os.ReadFile(filePath)

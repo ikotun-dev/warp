@@ -1,21 +1,36 @@
 FROM golang:latest AS builder 
-LABEL maintainer="Ikotun danlogan2003@gmail.com"
-LABEL description="Warp."
-WORKDIR /app 
+
+WORKDIR /source 
 
 COPY go.mod go.sum ./
 
 RUN go mod download 
 
-COPY ./pkg/ . 
-RUN go build -o warp . 
+COPY ./pkg ./pkg 
+
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o warp ./pkg
 
 FROM alpine:3.19
 
-WORKDIR /app
+COPY --from=builder /source/warp .
 
-COPY --from=builder /app/warp .
+RUN mkdir frontend
+
+# create a default config.yaml file 
+RUN echo "port: 8080" > /config.yaml && \
+  echo "fallbackDocument: index.html" >> /config.yaml && \
+  echo "root: index.html" >> /config.yaml
+
+RUN echo $'<body style="background-color: black"><h1>Hello !!</h1>\n\
+  <p>You have successfully setup and started Warp.</p>\n\
+  <p>Copy your own config file to <b>`/config.yaml`</b> and your static files to the <b>`/frontend`</b> directory o serve your files.</p><body>' > /frontend/index.html
+
+
 
 EXPOSE 8080
 
-CMD ["./warp"]
+ENTRYPOINT [ "./warp" ]
+
+
+
+

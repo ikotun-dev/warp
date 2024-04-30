@@ -20,9 +20,11 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//rootPath := filepath.Join("/frontend")
+
 	//TODO: Loggin option
 	log.Printf("LOG: %s", r.URL)
-	filePath = config.RootDir + r.URL.Path
+	filePath = "../frontend/" + r.URL.Path
 	_, err := os.Stat(filePath)
 
 	if err != nil {
