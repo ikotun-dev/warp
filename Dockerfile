@@ -21,15 +21,15 @@ RUN echo "port: 8080" > /config.yaml && \
   echo "fallbackDocument: index.html" >> /config.yaml && \
   echo "root: index.html" >> /config.yaml
 
-RUN echo $'<body style="background-color: black"><h1>Hello !!</h1>\n\
+RUN echo $'<body style="background-color: black; color: white;" ><h1>Hello !!</h1>\n\
   <p>You have successfully setup and started Warp.</p>\n\
   <p>Copy your own config file to <b>`/config.yaml`</b> and your static files to the <b>`/frontend`</b> directory o serve your files.</p><body>' > /frontend/index.html
-
 
 
 EXPOSE 8080
 
 ENTRYPOINT [ "./warp" ]
+
 
 
 
