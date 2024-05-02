@@ -27,6 +27,7 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		filePath = config.RootDir
 		log.Printf("Rewriting to root file :  %s", r.URL.Path)
+		w.WriteHeader(http.StatusTemporaryRedirect)
 		http.ServeFile(w, r, defaultPath)
 	}
 
