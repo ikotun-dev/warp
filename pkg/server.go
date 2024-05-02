@@ -24,22 +24,31 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 
 	//rootPath := filepath.Join("/frontend")
 
-	//TODO: Loggin option
-	log.Printf("LOG: %s", r.URL)
+	//TODO: Loggin option in the config yaml
 
 	filePath = "../frontend/" + r.URL.Path
 
 	_, err := os.Stat(filePath)
-	testPath := filepath.Join("../frontend", config.RootDir)
+	defaultPath := filepath.Join("../frontend", config.RootDir)
+
+	if r.URL.Path == "/" {
+		log.Printf("Auto write to index")
+		http.ServeFile(w, r, defaultPath)
+	}
 
 	if err != nil {
 
-		//Doesn't find the pathName.html so check if its rewrite ?
+		//TRYING TO SEE WHAT I CAN DO FOR THE 404 STUFF
+
+		resp, err := http.Get("http://localhost:8000/" + r.URL.Path)
+		if err != nil {
+			log.Panic("Error occurred : ", err)
+		}
+		log.Print("RESP : ", resp)
+
 		filePath = config.RootDir
 		log.Printf("LOG: I no see the file : %s", r.URL.Path)
-		http.ServeFile(w, r, testPath)
-		//fallbackDocument := config.FallbackDocument
-		//filePath = fallbackDocument
+		http.ServeFile(w, r, defaultPath)
 
 	}
 
@@ -51,15 +60,13 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 		mimeType = "text/html; charset=utf-8"
 	}
 
-	log.Printf("Extension: %s", ext)
-
-	log.Printf("MimeType :  %s", mimeType)
-
 	w.Header().Set("Content-Type", mimeType)
 
-	fmt.Println("Server running on  : ", config.Port)
 	http.ServeFile(w, r, filePath)
 }
+
+//Entry ( where program starts from )
+//Initiates the config.yaml file
 
 func main() {
 	config = InitConfig()
