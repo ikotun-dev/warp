@@ -22,34 +22,19 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//rootPath := filepath.Join("/frontend")
-
 	//TODO: Loggin option in the config yaml
 
-	filePath = "../frontend/" + r.URL.Path
+	filePath = "../public" + r.URL.Path
 
 	_, err := os.Stat(filePath)
-	defaultPath := filepath.Join("../frontend", config.RootDir)
-
-	if r.URL.Path == "/" {
-		log.Printf("Auto write to index")
-		http.ServeFile(w, r, defaultPath)
-	}
+	defaultPath := filepath.Join("../public", config.RootDir)
 
 	if err != nil {
-
 		//TRYING TO SEE WHAT I CAN DO FOR THE 404 STUFF
-
-		resp, err := http.Get("http://localhost:8000/" + r.URL.Path)
-		if err != nil {
-			log.Panic("Error occurred : ", err)
-		}
-		log.Print("RESP : ", resp)
-
+		//
 		filePath = config.RootDir
 		log.Printf("LOG: I no see the file : %s", r.URL.Path)
 		http.ServeFile(w, r, defaultPath)
-
 	}
 
 	ext := filepath.Ext(filePath)
@@ -65,9 +50,8 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, filePath)
 }
 
-//Entry ( where program starts from )
-//Initiates the config.yaml file
-
+// Entry
+// Initiates the config.yaml file
 func main() {
 	config = InitConfig()
 
