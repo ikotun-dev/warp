@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -23,11 +24,11 @@ func MockConfig() *Config {
 }
 
 func InitConfig() *Config {
-	if _, err := os.Stat("../config.yaml"); os.IsNotExist(err) {
+	if _, err := os.Stat("../warp.yaml"); os.IsNotExist(err) {
 		return MockConfig()
 	}
 	var err error
-	config, err = ReadConfig("../config.yaml")
+	config, err = ReadConfig("../warp.yaml")
 	if err != nil {
 		fmt.Println("Error : ", err)
 	}
@@ -44,7 +45,7 @@ func ReadConfig(filename string) (*Config, error) {
 		fmt.Printf("yamlFile.Get err #%v ", err)
 	}
 
-	fmt.Println("YAML file contents:", string(yamlFile))
+	log.Println("Successfully read configuration file.")
 
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
