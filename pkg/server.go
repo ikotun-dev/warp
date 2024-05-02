@@ -9,20 +9,15 @@ import (
 )
 
 var config *Config
-
 var mimeType string
-
 var filePath string
 
 func serveStaticFile(w http.ResponseWriter, r *http.Request) {
-	//TODO: handle rewrites, 404
 
 	if config == nil {
 		http.Error(w, "Configuration not initialized", http.StatusInternalServerError)
 		return
 	}
-
-	//TODO: Loggin option in the config yaml
 
 	filePath = "../public" + r.URL.Path
 
@@ -30,10 +25,8 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 	defaultPath := filepath.Join("../public", config.RootDir)
 
 	if err != nil {
-		//TRYING TO SEE WHAT I CAN DO FOR THE 404 STUFF
-		//
 		filePath = config.RootDir
-		log.Printf("LOG: I no see the file : %s", r.URL.Path)
+		log.Printf("Rewriting to root file :  %s", r.URL.Path)
 		http.ServeFile(w, r, defaultPath)
 	}
 
@@ -57,9 +50,7 @@ func main() {
 
 	http.HandleFunc("/", serveStaticFile)
 
-	configPort := ":" + config.Port
+	fmt.Println("Warp server running on : ", config.Port)
 
-	fmt.Println("PORT : ", configPort)
-
-	log.Fatal(http.ListenAndServe(configPort, nil))
+	log.Fatal(http.ListenAndServe(":"+config.Port, nil))
 }
