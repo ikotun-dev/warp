@@ -1,36 +1,36 @@
-FROM golang:latest AS builder 
 
-WORKDIR /source 
+# Use a compatible base image for Go
+FROM golang:1.22-alpine AS builder
+
+WORKDIR /source
 
 COPY go.mod go.sum ./
 
-RUN go mod download 
+RUN go mod download
 
-COPY ./pkg ./pkg 
+COPY ./pkg ./pkg
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o warp ./pkg
+# Cross-compile for Linux on x86 architecture
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o warp ./pkg
 
-FROM alpine:3.19
+# Use a lightweight Alpine image
+FROM alpine:3.14
 
 COPY --from=builder /source/warp .
 
-RUN mkdir public
+RUN mkdir /public
 
-# create a default config.yaml file 
+# Create a default config.yaml file
 RUN echo "port: 8080" > /warp.yaml && \
   echo "fallbackDocument: index.html" >> /warp.yaml && \
   echo "root: index.html" >> /warp.yaml
 
+# Create a default index.html file
 RUN echo $'<body style="background-color: black; color: white;" ><h1>Hello !!</h1>\n\
   <p>You have successfully setup and started Warp.</p>\n\
-  <p>Copy your own config file to <b>`/config.yaml`</b> and your static files to the <b>`/frontend`</b> directory o serve your files.</p><body>' > /public/index.html
-
+  <p>Copy your own config file to <b>/warp.yaml</b> and your static files to the <b>/public</b> directory to serve your files.</p><body>' > /public/index.html
 
 EXPOSE 8080
 
 ENTRYPOINT [ "./warp" ]
-
-
-
-
 
