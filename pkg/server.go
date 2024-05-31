@@ -24,12 +24,6 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 	_, err := os.Stat(filePath)
 	defaultPath := filepath.Join("../public", config.RootDir)
 
-	if r.URL.Path == "/" || r.URL.Path == "" {
-		log.Printf("Root :  %s", r.URL.Path)
-
-		http.ServeFile(w, r, defaultPath)
-	}
-
 	if err != nil {
 		filePath = config.RootDir
 		log.Printf("Rewriting to root file :  %s", r.URL.Path)
