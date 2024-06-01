@@ -19,16 +19,41 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//TODO: check if the path isnt in the rewrite
+	//
 	filePath = "../public" + r.URL.Path
 
 	_, err := os.Stat(filePath)
 	defaultPath := filepath.Join("../public", config.RootDir)
 
 	if err != nil {
-		filePath = config.RootDir
-		log.Printf("Rewriting to root file :  %s", r.URL.Path)
-		w.WriteHeader(http.StatusTemporaryRedirect)
-		http.ServeFile(w, r, defaultPath)
+
+		// check if the route is in the list of provided routes.
+
+		eixstingRoute := false
+		for _, route := range config.Routes {
+			log.Printf("Route : %s", route)
+			if r.URL.Path == route {
+				eixstingRoute = true
+			}
+		}
+
+		// filePath = config.RootDir
+		// log.Printf("Rewriting to root file :  %s", r.URL.Path)
+		// w.WriteHeader(http.StatusTemporaryRedirect)
+
+		if eixstingRoute {
+			http.ServeFile(w, r, defaultPath)
+		} else {
+			if config.FallbackDocument != "" {
+				fallBackDocumentPath := filepath.Join("../public", config.FallbackDocument)
+				http.ServeFile(w, r, fallBackDocumentPath)
+			}
+
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			fmt.Fprintf(w, "404 Not Found, served by Warp Server")
+
+		}
 	}
 
 	ext := filepath.Ext(filePath)
