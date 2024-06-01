@@ -8,7 +8,8 @@ It's also an attempt to deeply understand the inner workings of http/mimetypes/r
 
 ##### Deployed with warp
 
-[larchive](https://larchive-fe.fly.dev) on [https://fly.io](https://fly.io)
+[GITLY](https://warp-test.fly.dev) on [https://fly.io](https://fly.io)
+
 
 ### Why warp?
 
@@ -37,18 +38,14 @@ You can confirm by checking your browser.
 
 > This is an example
 
-````bash
+```bash
 port : PORT
 root : "index.html"
 fallbackDocument : "404.html"
 routes :
   - "/login"
   - "/signup"
-
-
-
-
-
+```
 
 ##### To use warp in your project
 
