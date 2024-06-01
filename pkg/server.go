@@ -48,9 +48,11 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 			if config.FallbackDocument != "" {
 				fallBackDocumentPath := filepath.Join("../public", config.FallbackDocument)
 				http.ServeFile(w, r, fallBackDocumentPath)
+
 			}
 
 			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			w.WriteHeader(http.StatusNotFound)
 			fmt.Fprintf(w, "404 Not Found, served by Warp Server")
 
 		}
@@ -65,7 +67,7 @@ func serveStaticFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", mimeType)
-
+	w.WriteHeader(http.StatusOK)
 	http.ServeFile(w, r, filePath)
 }
 

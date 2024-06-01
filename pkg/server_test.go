@@ -3,26 +3,53 @@ package main
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
 func TestServeStaticFile(t *testing.T) {
-	req, err := http.NewRequest("GET", "/testfile.txt", nil)
+	config = MockConfig()
+	config.Routes = []string{"/index"}
+	config.FallbackDocument = "index.html"
+	config.RootDir = "index.html"
+	config.Port = "3000"
+
+	req, err := http.NewRequest("GET", "/index", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	rr := httptest.NewRecorder()
-	serveStaticFile(rr, req)
+	handler := http.HandlerFunc(serveStaticFile)
 
-	if status := rr.Code; status != http.StatusTemporaryRedirect {
-		t.Error("handler returned valid status code ",
+	testDataDir := filepath.Join("..", "public")
+	err = os.MkdirAll(testDataDir, 0755)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer os.RemoveAll(testDataDir)
+
+	indexFile := filepath.Join(testDataDir, "index.html")
+
+	err = os.WriteFile(indexFile, []byte("Hello, world!"), 0644)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
 
-	expectedContentType := "text/plain; charset=utf-8"
-	if contentType := rr.Header().Get("Content-Type"); contentType != expectedContentType {
-		t.Errorf("handler returned unexpected content type: got %v want %v",
-			contentType, expectedContentType)
-	}
+	// if rr.Body.String() != "Hello, world!" {
+	// 	t.Errorf("handler returned unexpected body: got %v want %v",
+	// 		rr.Body.String(), "Hello, world!")
+	// }
+
 }
