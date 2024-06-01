@@ -2,39 +2,58 @@
 
 > Also not recommended for production _yet_
 
-This project was inspired by chimney [https://github.com/aosasona/chimney](https://github.com/aosasona/chimney). 
+This project was inspired by chimney [https://github.com/aosasona/chimney](https://github.com/aosasona/chimney).
 
-It's also an attempt to deeply understand the inner workings of http/mimetypes/request lifecycle and more. 
-##### Deployed with warp 
-  [larchive](https://larchive-fe.fly.dev) on [https://fly.io](https://fly.io)
+It's also an attempt to deeply understand the inner workings of http/mimetypes/request lifecycle and more.
 
-### Why warp? 
+##### Deployed with warp
 
+[larchive](https://larchive-fe.fly.dev) on [https://fly.io](https://fly.io)
 
-- Rewrites work by default. No special configuration is required. 
-- As tiny as possible as well 
-- Logs all incoming requests *( can be disabled )*
-- Accurate Mimetypes for all files 
+### Why warp?
+
+- Rewrites work by default. No special configuration is required.
+- As tiny as possible as well
+- Logs all incoming requests _( can be disabled )_
+- Accurate Mimetypes for all files
 
 ### Installation
-##### Using Docker 
+
+##### Using Docker
+
 ###### Runing the docker image
+
 ```bash
 docker pull ikotun/warp:latest
 docker run -p PORT:8080 ikotun/warp:latest
 ```
-This should have warp running on the specified port. 
-You can confirm by checking your browser. 
+
+This should have warp running on the specified port.
+You can confirm by checking your browser.
 
 ![warp](https://res.cloudinary.com/dbd7rcwwx/image/upload/v1714760406/Screenshot_2024-05-03_at_7.17.21_PM_jlks9r.png)
 
+> Create a warp.yaml file in the root directory of your project.
 
- > Create a warp.yaml file in the root directory of your project.
- > See code for sample
+> This is an example
 
- ##### To use warp in your project
+````bash
+port : PORT
+root : "index.html"
+fallbackDocument : "404.html"
+routes :
+  - "/login"
+  - "/signup"
+
+
+
+
+
+
+##### To use warp in your project
 
 ```bash
+
 #Pull warp
 FROM ikotun/warp:latest
 
@@ -46,6 +65,4 @@ COPY warp.yaml ./warp.yaml
 
 #Expose 80
 EXPOSE 8080
-```
-
-
+````
