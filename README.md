@@ -8,7 +8,7 @@ It's also an attempt to deeply understand the inner workings of http/mimetypes/r
 
 ##### Deployed with warp
 
-[larchive](https://larchive-fe.fly.dev) on [https://fly.io](https://fly.io)
+[GITLY](https://warp-test.fly.dev) on [https://fly.io](https://fly.io)
 
 ### Why warp?
 
