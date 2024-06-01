@@ -9,10 +9,13 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+//add rewrites list
+
 type Config struct {
-	Port             string `yaml:"port"`
-	FallbackDocument string `yaml:"fallbackDocument"`
-	RootDir          string `yaml:"root"`
+	Port             string   `yaml:"port"`
+	FallbackDocument string   `yaml:"fallbackDocument"`
+	RootDir          string   `yaml:"root"`
+	Routes           []string `yaml:"routes"`
 }
 
 func MockConfig() *Config {
@@ -20,6 +23,7 @@ func MockConfig() *Config {
 		Port:             "8080",
 		FallbackDocument: "index.html",
 		RootDir:          "/path/to/root",
+		Routes:           []string{},
 	}
 }
 

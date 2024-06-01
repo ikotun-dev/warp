@@ -10,6 +10,7 @@ It's also an attempt to deeply understand the inner workings of http/mimetypes/r
 
 [GITLY](https://warp-test.fly.dev) on [https://fly.io](https://fly.io)
 
+
 ### Why warp?
 
 - Rewrites work by default. No special configuration is required.
@@ -44,7 +45,6 @@ fallbackDocument : "404.html"
 routes :
   - "/login"
   - "/signup"
-
 ```
 
 ##### To use warp in your project
@@ -62,4 +62,4 @@ COPY warp.yaml ./warp.yaml
 
 #Expose 80
 EXPOSE 8080
-```
+````
