@@ -16,14 +16,14 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o warp
 # Use a lightweight Alpine image
 FROM alpine:3.14
 
-COPY --from=builder /source/warp .
+COPY --from=builder /source/warp /usr/local/bin/warp
 
-RUN mkdir /public
+RUN mkdir -p /var/www/html /etc/warp
 
 # Create a default config.yaml file
-RUN echo "port: 8080" > /warp.yaml && \
-  echo "fallbackDocument: index.html" >> /warp.yaml && \
-  echo "root: index.html" >> /warp.yaml
+RUN echo "port: 8080" > /etc/warp/warp.yaml && \
+  echo "fallbackDocument: index.html" >> /etc/warp/warp.yaml && \
+  echo "root: index.html" >> /etc/warp/warp.yaml
 
 # Create a default index.html file
 RUN echo $'<body style="background-color: black; color: white;" ><h1>Hello !!</h1>\n\

@@ -1,3 +1,5 @@
+//TODO: follow conventions [www/var/html]
+
 package main
 
 import (
